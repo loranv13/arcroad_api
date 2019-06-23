@@ -1,0 +1,73 @@
+<html>
+
+
+<head>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" class="init">
+
+
+$(document).ready(function() {
+  var listeProjets = $('#test').DataTable( {
+      paging:   true,
+      info:     false,
+      searching: true,
+      //ajax: 'http://192.168.30.21:5001/json',
+      ajax:'http://192.168.30.21:5000/projets',
+      initComplete: function( settings, json ) {
+          console.log(JSON.stringify(json));
+      },
+      columns: [
+            { "data": "projectCPI" },
+            { "data": "projectClient" },
+            { "data": "projectDP" },
+            { "data": "projectDataMEP" },
+            { "data": "projectDateCreate" },
+            { "data": "projectGed" },
+            { "data": "projectId" },
+            { "data": "projectName" },
+            { "data": "projectStatus" }
+        ],
+      columnDefs: [ {
+            "targets": '_all' ,
+            "render": function(data){
+              console.log('LINE')
+              console.log(data)
+              return data
+            }
+        } ]
+  } );
+
+
+  $.ajax({
+
+       url : 'http://192.168.30.21:5000/projets',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         console.log(JSON.stringify(json))
+       }
+    });
+
+
+
+
+} );
+
+
+	</script>
+
+</head>
+
+  <body>
+      <table id="test" class="display" style="width:100%">
+        <thead>
+          
+        </thead>
+      </table>
+  </body>
+
+
+</html>

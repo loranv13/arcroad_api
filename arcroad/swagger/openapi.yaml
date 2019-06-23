@@ -1,0 +1,450 @@
+openapi: "3.0.0"
+info:
+  title: API FMO
+  description: Fourni l'ensemble des API permettant d'agir avec les projets d'infrastructure
+  contact:
+    name: API Support
+    url: http://arcroad.intra.monext.fr/
+    email: archi.roadmap@monext.net
+  version: 1.0.0
+
+paths:
+
+#-------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------- PROJETS
+#-------------------------------------------------------------------------------------------
+  /projets:
+    get:
+      tags:
+      - Projet
+      description: Fournit la liste de projets
+      summary: Fournit la liste des projets
+      operationId: arcroad.api.projets.get_projets
+      responses:
+        200:
+          description: Success
+    post:
+      operationId: arcroad.api.projets.add_projets
+      tags:
+      - Projet
+      summary: Création d'un projet
+      requestBody:
+        description: Projet à ajouter
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/newProjet'
+      responses:
+        201:
+          description: Projet enregistré
+        default:
+          description: Erreur non identifiée
+
+  /projets/{id}:
+    get:
+      tags:
+      - Projet
+      description: Fournit le détail d'un projet
+      summary: Fournit le détail d'un projet
+      operationId: arcroad.api.projets.get_projet_by_id
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du projet recherché
+          required: true
+          schema:
+            type: integer
+
+
+#
+# Gestion des serveurs  du projet
+#
+
+
+  /projets/{id}/serveur:
+    get:
+      tags:
+      - Projet
+      description: Fourni les serveurs utilisés dans le projet
+      summary: Fourni les serveurs utilisés dans le projet
+      operationId: arcroad.api.projets.get_serveurs_du_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du projet pour lequel la liste des serveurs est demandée
+          required: true
+          schema:
+            type: integer
+
+  /projets/{idProjet}/serveur/{idServeur}:
+    put:
+      tags:
+      - Projet
+      description: Ajoute un serveur au projet
+      summary: Ajoute un serveur au projet
+      operationId: arcroad.api.projets.add_serveur_au_projet
+      responses:
+        204:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite ajouter un serveur
+          required: true
+          schema:
+            type: integer
+        - name: idServeur
+          in: path
+          description: ID du serveur à ajouter
+          required: true
+          schema:
+            type: integer
+    delete:
+      tags:
+      - Projet
+      description: Supprime un serveur du projet
+      summary: Supprime un serveur du projet
+      operationId: arcroad.api.projets.supp_serveur_au_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite supprimer un serveur
+          required: true
+          schema:
+            type: integer
+        - name: idServeur
+          in: path
+          description: ID du serveur à supprimer
+          required: true
+          schema:
+            type: integer
+
+#
+# Gestion des règles fw du projet
+#
+
+  /projets/{idProjet}/rglfw:
+    get:
+      tags:
+      - Projet
+      description: Fourni les règles firewall nécessaires au projet
+      summary: Fourni les règles firewall nécessaires au projet
+      operationId: arcroad.api.projets.get_rglfws_du_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet pour lequel la liste des règles est demandée
+          required: true
+          schema:
+            type: integer
+
+    post:
+      operationId: arcroad.api.projets.add_rglfw_au_projet
+      tags:
+      - Projet
+      summary: Création d'une règle FW pour le projet
+      requestBody:
+        description: Création d'une règle FW pour le projet
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rglfw'
+      responses:
+        201:
+          description: Règle FW enregistrée
+        default:
+          description: Erreur non identifiée
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet
+          required: true
+          schema:
+            type: integer
+
+
+  /projets/{idProjet}/rglfw/{idRglfw}:
+    put:
+      tags:
+      - Projet
+      description: Ajoute une règle fw au projet
+      summary: Ajoute une règle fw au projet
+      operationId: arcroad.api.projets.modif_rglfw_au_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite ajouter une règle
+          required: true
+          schema:
+            type: integer
+        - name: idRglfw
+          in: path
+          description: ID de la règle à ajouter
+          required: true
+          schema:
+            type: integer
+    delete:
+      tags:
+      - Projet
+      description: Supprime une règle fw du projet
+      summary: Supprime une règle fw du projet
+      operationId: arcroad.api.projets.supp_rglfw_au_projet
+      responses:
+        204:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite Supprimer une règle
+          required: true
+          schema:
+            type: integer
+        - name: idRglfw
+          in: path
+          description: ID de la règle à Supprimer
+          required: true
+          schema:
+            type: integer
+
+#-------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------- SERVEURS
+#-------------------------------------------------------------------------------------------
+  /serveurs:
+    get:
+      tags:
+      - Serveur
+      description: Fournit la liste des serveurs
+      summary: Fournit la liste des serveurs
+      operationId: arcroad.api.serveurs.get_serveurs
+      responses:
+        200:
+          description: Success
+
+  /serveurs/{id}:
+    get:
+      tags:
+      - Serveur
+      description: Fournit les informations d'un serveur
+      summary: Fournit les informations d'un serveur
+      operationId: arcroad.api.serveurs.get_serveur_by_id
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du serveur
+          required: true
+          schema:
+            type: integer
+    delete:
+      tags:
+      - Serveur
+      description: Supprime les informations d'un serveur
+      summary: Supprime les informations d'un serveur
+      operationId: arcroad.api.serveurs.supp_serveur
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du serveur
+          required: true
+          schema:
+            type: integer
+
+
+#------------------------------------------------------------------------------------------- REGLES FW
+  /reglefws:
+    get:
+      tags:
+      - Règles firewall
+      description: Fournit la liste des règles firewall
+      summary: Fournit la liste des règles firewall
+      operationId: arcroad.api.rglfws.get_rglfws
+      responses:
+        200:
+          description: Success
+
+#------------------------------------------------------------------------------------------- USERS
+  /users:
+    get:
+      tags:
+      - Utilisateur
+      description: Fournit la liste des uilisateurs
+      summary: Fournit la liste des utilisateurs
+      operationId: arcroad.api.users.get_users
+      responses:
+        200:
+          description: Success
+
+
+  /users/{id}:
+    get:
+      tags:
+      - Utilisateur
+      description: Retourne les informations d'un utilisateur
+      summary: Retourne les informations d'un utilisateur
+      operationId: arcroad.api.users.get_user_by_id
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'utilisateur
+          required: true
+          schema:
+            type: integer
+
+
+
+#-------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------- OBJETRESEAU
+#-------------------------------------------------------------------------------------------
+  /objetreseaux:
+    get:
+      tags:
+      - Objets réseaux
+      description: Fournit la liste des objets réseaux
+      summary: Fournit la liste des objets réseaux
+      operationId: arcroad.api.objetReseau.get_objetReseaux
+      responses:
+        200:
+          description: Success
+    post:
+      operationId: arcroad.api.objetReseau.add_objetReseaux
+      tags:
+      - Objets réseaux
+      summary: Création d'un objet réseau
+      requestBody:
+        description: Objet réseau à ajouter
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/objetReseau'
+      responses:
+        201:
+          description: Objet réseau enregistré
+        default:
+          description: Erreur non identifiée
+
+
+components:
+  schemas:
+
+    newProjet:
+      required:
+        - projectName
+      type: object
+      properties:
+        projectName:
+          type: string
+          example: "Emission carte VISA banque Monext"
+        projectClient:
+          description: ID du client
+          type: integer
+          example: 1
+        projectDataMEP:
+          type: string
+          format: date
+          example: "01-01-2020"
+        projectCPI:
+          description: ID du chef de projet infrastructure
+          type: integer
+          example: 1
+        projectDP:
+          description: ID du directeur de projet
+          type: integer
+          example: 1
+        projectStatus:
+          type: integer
+          description: Status du projet (en construction, en prod)
+          example: 1
+          enum:
+            - 1
+            - 2
+        projectGed:
+          type: string
+          example: "https://ged.intra.monext.fr"
+
+
+    Projet:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectName:
+          type: string
+        projectClient:
+          description: ID du client
+          type: integer
+        projectDataMEP:
+          type: string
+          format: date
+        projectCPI:
+          description: ID du chef de projet infrastructure
+          type: integer
+        projectDP:
+          description: ID du directeur de projet
+          type: integer
+        projectStatus:
+          type: integer
+          description: Status du projet (en construction, en prod)
+          enum:
+            - 1
+            - 2
+        projectGed:
+          type: string
+
+    Serveur:
+      type: object
+      properties:
+        srvId:
+          type: integer
+        srvHostname:
+          type: string
+        srvCPU:
+          type: number
+        srvRAM:
+          type: integer
+        srvPCI:
+          type: boolean
+        srvOSName:
+          type: string
+
+    Rglfw:
+      required:
+        - rglfwDescription
+      type: object
+      properties:
+        rglfwSource:
+          type: integer
+        rglfwDestination:
+          type: integer
+        rglfwPort:
+          type: integer
+        rglfwDescription:
+          type: string
+
+    objetReseau:
+      type: object
+      properties:
+        objName:
+          type: string

@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  description: API FMO INFRA
+  version: "1.0.0"
+  title: API FMO INFRA
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/arcroad/"
+
+paths:
+  /serveurs:
+    get:
+      operationId: "arcroad.api.serveurs.get_serveurs"
+      tags:
+      - "Serveurs"
+      summary: "Liste des Serveurs"
+      description: "Liste des Serveurs"
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            type: object
+            properties:
+              serveurs:
+                type: array
+                items:
+                  $ref: '#/definitions/Serveur'
+
+  /projets:
+    get:
+      operationId: "arcroad.api.projets.get_projets"
+      tags:
+      - "Projets"
+      summary: "Liste des Projets"
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            type: object
+            properties:
+              projets:
+                type: array
+                items:
+                  $ref: '#/definitions/Projet'
+
+
+
+  /projets/{id}:
+    get:
+      operationId: "arcroad.api.projets.get_projet_by_id"
+      tags:
+      - 'Projets'
+      parameters:
+      - name: id
+        in: 'path'
+        description: ID du projet à transmettre
+        required: true
+        type: integer
+        format: int64
+      summary: "Fournit les informations du projet"
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            $ref: '#/definitions/Projet'
+        404:
+          description: Projet non trouvé
+
+  /projets/{id}/serveurs:
+    get:
+      operationId: "arcroad.api.projets.get_serveurs_du_projet"
+      tags:
+      - 'Projets'
+      parameters:
+      - name: id
+        in: 'path'
+        description: ID du projet dont on souhaite récupérer la liste des serveurs
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            type: object
+            properties:
+              projetId:
+                type: integer
+              serveurs:
+                type: array
+                items:
+                  $ref: '#/definitions/Serveur'
+        404:
+          description: Serveurs non trouvés pour ce projet
+
+  /projets/{id}/rglFWs:
+    get:
+      operationId: "arcroad.api.projets.get_rglfws_du_projet"
+      tags:
+      - 'Projets'
+      parameters:
+      - name: id
+        in: 'path'
+        description: ID du projet dont on souhaite récupérer la liste des règles firewall
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: 'Success'
+          schema:
+            type: object
+            properties:
+              projetId:
+                type: integer
+              rglFWs:
+                type: array
+                items:
+                  $ref: '#/definitions/Rglfw'
+        404:
+          description: Règles firewall non trouvés pour ce projet
+
+
+
+
+
+definitions:
+
+
+  Projet:
+    type: object
+    properties:
+      projectId:
+        type: integer
+      projectName:
+        type: string
+      projectClient:
+        type: string
+      projectDataMEP:
+        type: string
+      projectDateCreate:
+        type: string
+      projectCPI:
+        type: string
+      projectDP:
+        type: string
+      projectStatus:
+        type: integer
+      projectGed:
+        type: string
+
+
+  newProjet:
+    required:
+      - projectName
+    type: object
+    properties:
+      projectName:
+        type: string
+      projectClient:
+        type: string
+      projectDataMEP:
+        type: string
+      projectDateCreate:
+        type: string
+      projectCPI:
+        type: string
+      projectDP:
+        type: string
+      projectStatus:
+        type: integer
+      projectGed:
+        type: string
+
+
+  Serveur:
+    type: object
+    properties:
+      srvId:
+        type: integer
+      srvHostname:
+        type: string
+      srvCPU:
+        type: number
+      srvRAM:
+        type: integer
+      srvPCI:
+        type: boolean
+      srvOSName:
+        type: string
+
+
+  Rglfw:
+    type: object
+    properties:
+      rglfwobjReseauSource:
+        type: string
+      rglfwobjReseauDestination:
+        type: string
+      rglfwport:
+        type: integer
+      rglfwDescription:
+        type: string
+      rglfwCount:
+        type: integer
+      rglfwId:
+        type: integer

@@ -1,0 +1,16 @@
+j['ErrorCode']      = 666
+j['ErrorLabel']     = Tu crois que c\'est la fête??!! Droits insuffisants!!!
+j['idProjets']
+
+j['ErrorCode']      = 100 #La demande de suppression ne peut être honnoré car l'objet appartient à un autre objet
+j['ErrorLabel']     = 'Le serveur utilisé dans un ou plusieurs projets'
+j['idProjets']      = data
+
+
+j['ErrorCode']      = 200
+j['ErrorLabel']     = 'Objet inexistant'
+
+
+j['ErrorCode']      = 101
+j['ErrorLabel']     = La règle a été soumise ou est en cours de traitement
+j['']      =

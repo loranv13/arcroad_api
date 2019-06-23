@@ -1,0 +1,294 @@
+openapi: "3.0.0"
+info:
+  title: API FMO
+  description: Fourni l'ensemble des API permettant d'agir avec les projets d'infrastructure
+  contact:
+    name: API Support
+    url: http://arcroad.intra.monext.fr/
+    email: archi.roadmap@monext.net
+  version: 1.0.0
+
+paths:
+
+#------------------------------------------------------------------------------------------- PROJETS
+  /projets:
+    get:
+      tags:
+      - Projet
+      description: Fournit la liste de projets
+      summary: Fournit la liste des projets
+      operationId: arcroad.api.projets.get_projets
+      responses:
+        200:
+          description: Success
+    post:
+      operationId: arcroad.api.projets.add_projets
+      tags:
+      - Projet
+      summary: Création d'un projet
+      requestBody:
+        description: user to add to the system
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/newProjet'
+      responses:
+        201:
+          description: Projet enregistré
+        default:
+          description: Erreur non identifiée
+
+  /projets/{id}:
+    get:
+      tags:
+      - Projet
+      description: Fournit le détail d'un projet
+      summary: Fournit le détail d'un projet
+      operationId: arcroad.api.projets.get_projet_by_id
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du projet recherché
+          required: true
+          schema:
+            type: integer
+
+
+#
+# Gestion des serveurs fw du projet
+#
+
+
+  /projets/{id}/serveur:
+    get:
+      tags:
+      - Projet
+      description: Fourni les serveurs utilisés dans le projet
+      summary: Fourni les serveurs utilisés dans le projet
+      operationId: arcroad.api.projets.get_serveurs_du_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du projet pour lequel la liste des serveurs est demandée
+          required: true
+          schema:
+            type: integer
+
+  /projets/{idProjet}/serveur/{idServeur}:
+    put:
+      tags:
+      - Projet
+      description: Ajoute un serveur au projet
+      summary: Ajoute un serveur au projet
+      operationId: arcroad.api.projets.add_serveur_au_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite ajouter un serveur
+          required: true
+          schema:
+            type: integer
+        - name: idServeur
+          in: path
+          description: ID du serveur à ajouter
+          required: true
+          schema:
+            type: integer
+    delete:
+      tags:
+      - Projet
+      description: Supprime un serveur du projet
+      summary: Supprime un serveur du projet
+      operationId: arcroad.api.projets.supp_serveur_au_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite supprimer un serveur
+          required: true
+          schema:
+            type: integer
+        - name: idServeur
+          in: path
+          description: ID du serveur à supprimer
+          required: true
+          schema:
+            type: integer
+
+#
+# Gestion des règles fw du projet
+#
+
+  /projets/{id}/rglfw:
+    get:
+      tags:
+      - Projet
+      description: Fourni les règles firewall nécessaires au projet
+      summary: Fourni les règles firewall nécessaires au projet
+      operationId: arcroad.api.projets.get_rglfws_du_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: id
+          in: path
+          description: ID du projet pour lequel la liste des règles est demandée
+          required: true
+          schema:
+            type: integer
+
+  /projets/{idProjet}/rglfw/{idRglfw}:
+    put:
+      tags:
+      - Projet
+      description: Ajoute une règle fw au projet
+      summary: Ajoute une règle fw au projet
+      operationId: arcroad.api.projets.add_rglfw_au_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite ajouter une règle
+          required: true
+          schema:
+            type: integer
+        - name: idRglfw
+          in: path
+          description: ID de la règle à ajouter
+          required: true
+          schema:
+            type: integer
+    delete:
+      tags:
+      - Projet
+      description: Supprime une règle fw du projet
+      summary: Supprime une règle fw du projet
+      operationId: arcroad.api.projets.supp_rglfw_au_projet
+      responses:
+        200:
+          description: Success
+      parameters:
+        - name: idProjet
+          in: path
+          description: ID du projet auquel on souhaite Supprimer une règle
+          required: true
+          schema:
+            type: integer
+        - name: idRglfw
+          in: path
+          description: ID de la règle à Supprimer
+          required: true
+          schema:
+            type: integer
+
+#------------------------------------------------------------------------------------------- SERVEURS
+  /serveurs:
+    get:
+      tags:
+      - Serveur
+      description: Fournit la liste des serveurs
+      summary: Fournit la liste des serveurs
+      operationId: arcroad.api.serveurs.get_serveurs
+      responses:
+        200:
+          description: Success
+
+
+#------------------------------------------------------------------------------------------- REGLES FW
+  /reglefws:
+    get:
+      tags:
+      - Règles firewall
+      description: Fournit la liste des règles firewall
+      summary: Fournit la liste des règles firewall
+      operationId: arcroad.api.rglfws.get_rglfws
+      responses:
+        200:
+          description: Success
+
+#------------------------------------------------------------------------------------------- REGLES FW
+  /users:
+    get:
+      tags:
+      - Utilisateurs
+      description: Fournit la liste des uilisateurs
+      summary: Fournit la liste des utilisateurs
+      operationId: arcroad.api.users.get_users
+      responses:
+        200:
+          description: Success
+
+components:
+  schemas:
+    newProjet:
+      required:
+        - projectName
+      type: object
+      properties:
+        projectName:
+          type: string
+        projectClient:
+          type: integer
+        projectDataMEP:
+          type: string
+        projectDateCreate:
+          type: string
+        projectCPI:
+          type: integer
+        projectDP:
+          type: integer
+        projectStatus:
+          type: integer
+        projectGed:
+          type: string
+
+    Projet:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectName:
+          type: string
+        projectClient:
+          type: integer
+        projectDataMEP:
+          type: string
+        projectDateCreate:
+          type: string
+        projectCPI:
+          type: integer
+        projectDP:
+          type: integer
+        projectStatus:
+          type: integer
+        projectGed:
+          type: string
+
+    Serveur:
+      type: object
+      properties:
+        srvId:
+          type: integer
+        srvHostname:
+          type: string
+        srvCPU:
+          type: number
+        srvRAM:
+          type: integer
+        srvPCI:
+          type: boolean
+        srvOSName:
+          type: string
